@@ -12,7 +12,10 @@ module.exports = function (app) {
       console.log(translatePackage)
       if (translatePackage.locale === "american-to-british") {
         let trans = translator.americanToBritish(req.body.text);
-        console.log(trans)
+        res.json({text: req.body.text, translation: trans})
+      } else {
+        let trans = translator.britishToAmerican(req.body.text);
+        res.json({text: req.body.text, translation: trans})
       }
     });
 };
