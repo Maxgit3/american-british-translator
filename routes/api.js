@@ -11,11 +11,15 @@ module.exports = function (app) {
       let translatePackage = req.body;
       console.log(translatePackage)
       if (translatePackage.locale === "american-to-british") {
-        let trans = translator.americanToBritish(req.body.text);
-        res.json({text: req.body.text, translation: trans})
+        let trans1 = translator.americanToBritish(req.body.text);
+        console.log(trans1)
+        res.json({text: req.body.text, translation: trans1})
+        return;
       } else {
-        let trans = translator.britishToAmerican(req.body.text);
-        res.json({text: req.body.text, translation: trans})
+        let trans2 = translator.britishToAmerican(req.body.text);
+        console.log(trans2)
+        res.json({text: req.body.text, translation: trans2})
+        return;
       }
     });
 };
