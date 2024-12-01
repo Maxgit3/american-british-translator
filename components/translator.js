@@ -14,7 +14,6 @@ class Translator {
         }
 
         arrPhrase.forEach((word, idx) => {
-            console.log(word)
             if(americanToBritishSpelling[word]) {
                 britishPhrase[idx] = `<span class="highlight">${americanToBritishSpelling[word]}</span>`;
             } else {
@@ -103,7 +102,6 @@ class Translator {
         // check for title
         americanPhrase.forEach((word, idx) => {
            let lowercase = word.toLowerCase()
-           console.log(lowercase)
            let title =  Object.keys(americanToBritishTitles).find((key) => {
               if (americanToBritishTitles[key] === lowercase) {
                 return americanToBritishTitles[key] === lowercase;
