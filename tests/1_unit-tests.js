@@ -51,7 +51,7 @@ suite('Unit Tests', () => {
     })
     test("Paracetamol takes up to an hour to work.", () => {
         let result = translator.britishToAmerican("Paracetamol takes up to an hour to work.")
-        assert.equal(result, `Paracetamol takes up to an hour to work.`)
+        assert.equal(result, `<span class="highlight">Tylenol</span> takes up to an hour to work.`)
     })
     test("First, caramelise the onions.", () => {
         let result = translator.britishToAmerican("First, caramelise the onions.")
@@ -67,6 +67,38 @@ suite('Unit Tests', () => {
     })
     test("I've just got bits and bobs in my bum bag.", () => {
         let result = translator.britishToAmerican("I've just got bits and bobs in my bum bag.")
-        assert.equal(result, `I've just got odds and ends in my fanny pack.`)
+        assert.equal(result, `I've just got <span class="highlight">odds and ends</span> in my <span class="highlight">fanny pack</span>.`)
+    })
+    test("The car boot sale at Boxted Airfield was called off.", () => {
+        let result = translator.britishToAmerican("The car boot sale at Boxted Airfield was called off.")
+        assert.equal(result, `The <span class="highlight">swap meet</span> at Boxted Airfield was called off.`)
+    })
+    test("Have you met Mrs Kalyani?", () => {
+        let result = translator.britishToAmerican("Have you met Mrs Kalyani?")
+        assert.equal(result, `Have you met <span class="highlight">Mrs.</span> Kalyani?`)
+    })
+    test("Prof Joyner of King's College, London.", () => {
+        let result = translator.britishToAmerican("Prof Joyner of King's College, London.")
+        assert.equal(result, `<span class="highlight">Prof.</span> Joyner of King's College, London.`)
+    })
+    test("Tea time is usually around 4 or 4.30.", () => {
+        let result = translator.britishToAmerican("Tea time is usually around 4 or 4.30.")
+        assert.equal(result, `Tea time is usually around 4 or <span class="highlight">4:30</span>.`)
+    })
+    test("Mangoes are my favorite fruit.", () => {
+        let result = translator.americanToBritish("Mangoes are my favorite fruit.")
+        assert.include(result, `<span class="highlight">`)
+    })
+    test("I ate yogurt for breakfast.", () => {
+        let result = translator.americanToBritish("I ate yogurt for breakfast.")
+        assert.include(result, `<span class="highlight">`)
+    })
+    test("We watched the footie match for a while.", () => {
+        let result = translator.britishToAmerican("We watched the footie match for a while.")
+        assert.include(result, `<span class="highlight">`)
+    })
+    test("Paracetamol takes up to an hour to work.", () => {
+        let result = translator.britishToAmerican("Paracetamol takes up to an hour to work.")
+        assert.include(result, `<span class="highlight">`)
     })
 });

@@ -11,19 +11,22 @@ class Translator {
 
         if (arrPhrase[arrPhrase.length - 1].includes(".")) {
             endpart = "."
-            let idx = arrPhrase[arrPhrase.length - 1].indexOf(".")
+            let idx = arrPhrase[arrPhrase.length - 1].lastIndexOf(".")
             arrPhrase[arrPhrase.length - 1] = arrPhrase[arrPhrase.length -1].slice(0, idx)
         }
 
         if (arrPhrase[arrPhrase.length - 1].includes("?")) {
             endpart = "?"
-            let idx = arrPhrase[arrPhrase.length - 1].indexOf("?")
+            let idx = arrPhrase[arrPhrase.length - 1].lastIndexOf("?")
             arrPhrase[arrPhrase.length - 1] = arrPhrase[arrPhrase.length -1].slice(0, idx)
         }
 
         arrPhrase.forEach((word, idx) => {
+            
             if(americanToBritishSpelling[word]) {
-                britishPhrase[idx] = `<span class="highlight">${americanToBritishSpelling[word]}</span>`;
+                let brWord = americanToBritishSpelling[word]
+                console.log(brWord)
+                britishPhrase[idx] = `<span class="highlight">${brWord}</span>`;
             } else {
                 britishPhrase[idx] = word;
             }
@@ -77,21 +80,30 @@ class Translator {
     britishToAmerican(phrase) {
         const arrPhrase = phrase.split(" ");
         let americanPhrase = [];
+        let britishTranslation = false;
+        let fishPhrase = false;
+        let endpart;
 
         if (arrPhrase[arrPhrase.length - 1].includes(".")) {
-            let idx = arrPhrase[arrPhrase.length - 1].indexOf(".")
-            arrPhrase[arrPhrase.length - 1] = arrPhrase[arrPhrase.length -1].slice(0, idx)
+            let idx = arrPhrase[arrPhrase.length - 1].lastIndexOf(".");
+            arrPhrase[arrPhrase.length - 1] = arrPhrase[arrPhrase.length -1].slice(0, idx);
+            endpart = ".";
+        }
+        if (arrPhrase[arrPhrase.length - 1].includes("?")) {
+            let idx = arrPhrase[arrPhrase.length - 1].lastIndexOf("?");
+            arrPhrase[arrPhrase.length - 1] = arrPhrase[arrPhrase.length -1].slice(0, idx);
+            endpart = "?";
         }
 
 
         arrPhrase.forEach((word, idx) => {
+            
             let trWord = Object.keys(americanToBritishSpelling).find((key) => {
                 if (americanToBritishSpelling[key] === word) {
                     return americanToBritishSpelling[key] === word
                 }             
             })
 
-            
             if (!trWord) {
                 americanPhrase[idx] = word;
             } else {
@@ -102,10 +114,15 @@ class Translator {
 
         // check for british word
         americanPhrase.forEach((word, idx) => {
-            if (britishOnly[word]) {
-                let britishWord = britishOnly[word];
+            if (britishOnly[word.toLowerCase()]) {
+                if (word == "chippy") {
+                    fishPhrase = true;
+                }
+                let lowercaseWord = word.toLowerCase()
+                let britishWord = britishOnly[lowercaseWord];
                 americanPhrase[idx] = `<span class="highlight">${britishWord}</span>`;
             }
+            britishTranslation = true;
         })
 
         // check for time
@@ -118,7 +135,7 @@ class Translator {
                 
                 let tempword = word.replace(".", ":")
                 
-                americanPhrase[idx] = tempword;
+                americanPhrase[idx] = `<span class="highlight">${tempword}</span>`;
             }
         })
 
@@ -132,7 +149,8 @@ class Translator {
             })
 
             if (title) {
-                americanPhrase[idx] = `<span class="highlight">${title}</span>`;
+                let s2 = title.charAt(0).toUpperCase() + title.slice(1);
+                americanPhrase[idx] = `<span class="highlight">${s2}</span>`;
             }
             
         })
@@ -140,16 +158,24 @@ class Translator {
         let americanString = americanPhrase.join(" ");
         let britishPhrase = Object.keys(britishOnly);
         britishPhrase.forEach((phrase, idx) => {
-            console.log(phrase.split(" ").length > 1)
+
+            if (fishPhrase && phrase == "chip shop") {
+                return;
+            }
             if (americanString.includes(phrase) && phrase.split(" ").length > 1) {
                 let value = britishOnly[phrase]
+                
                 let tempWord = americanString.replace(phrase, `<span class="highlight">${value}</span>`);
                 americanString = tempWord;
               } 
         })
 
         americanPhrase = americanString.split(" ");
-        americanPhrase[americanPhrase.length - 1] += ".";
+        if (endpart == "?") {
+            americanPhrase[americanPhrase.length - 1] += "?";
+        } else {
+            americanPhrase[americanPhrase.length - 1] += "."; 
+        }
         
         
 
